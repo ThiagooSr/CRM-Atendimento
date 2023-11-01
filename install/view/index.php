@@ -7,7 +7,7 @@
         <meta name="description" content="">
         <meta name="author" content="fairsketch">
         <link rel="icon" href="../assets/images/favicon.png" />
-        <title>RISE - Ultimate Project Manager & CRM Installation</title>
+        <title>DWL Atentdimento</title>
         <link rel='stylesheet' type='text/css' href='../assets/bootstrap/css/bootstrap.min.css' />
 
         <link rel='stylesheet' type='text/css' href='install.css' />
