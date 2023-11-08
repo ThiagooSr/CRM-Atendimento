@@ -295,7 +295,7 @@ if ($total_sub_tasks) {
                         <div class="checklist-items" id="checklist-items">
 
                         </div>
-                        <?php if ($can_edit_tasks) { ?>
+                        <?php if ($can_edit_tasks || $can_add_checklists) { ?>
                             <div class="mb5 mt5 btn-group checklist-options-panel hide" role="group">
                                 <button id="type-new-item-button" type="button" class="btn btn-default checklist_button active"> <?php echo app_lang('type_new_item'); ?></button>
                                 <button id="select-from-template-button" type="button" class="btn btn-default checklist_button"> <?php echo app_lang('select_from_template'); ?></button>

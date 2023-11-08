@@ -76,6 +76,18 @@
                             </div>
                             <div>
                                 <?php
+                                echo form_checkbox("can_add_checklists", "1", $can_add_checklists ? true : false, "id='can_add_checklists' class='form-check-input'");
+                                ?>
+                                <label for="can_add_checklists"><?php echo app_lang("can_add_checklists"); ?></label>
+                            </div>
+                            <div>
+                                <?php
+                                echo form_checkbox("can_move_tasks", "1", $can_move_tasks ? true : false, "id='can_move_tasks' class='form-check-input'");
+                                ?>
+                                <label for="can_move_tasks"><?php echo app_lang("can_move_tasks"); ?></label>
+                            </div>
+                            <div>
+                                <?php
                                 echo form_checkbox("can_delete_tasks", "1", $can_delete_tasks ? true : false, "id='can_delete_tasks' class='form-check-input'");
                                 ?>
                                 <label for="can_delete_tasks"><?php echo app_lang("can_delete_tasks"); ?></label>

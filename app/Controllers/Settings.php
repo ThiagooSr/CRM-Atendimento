@@ -257,6 +257,8 @@ class Settings extends Security_Controller {
             "client_can_create_projects",
             "client_can_create_tasks",
             "client_can_edit_tasks",
+            "client_can_add_checklists",
+            "client_can_move_tasks",
             "client_can_assign_tasks",
             "client_can_view_tasks",
             "client_can_comment_on_tasks",

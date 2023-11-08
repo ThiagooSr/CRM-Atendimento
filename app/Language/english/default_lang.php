@@ -619,6 +619,8 @@ $lang["security_type"] = "Security Type";
 $lang["client_can_view_tasks"] = "Client can view tasks?";
 $lang["client_can_create_tasks"] = "Client can create tasks?";
 $lang["client_can_edit_tasks"] = "Client can edit tasks?";
+$lang["client_can_add_checklists"] = "Client can add checklists?";
+$lang["client_can_move_tasks"] = "Client can move tasks?";
 $lang["client_can_comment_on_tasks"] = "Client can comment on tasks?";
 
 $lang["set_project_permissions"] = "Set project permissions";
@@ -627,6 +629,8 @@ $lang["can_edit_projects"] = "Can edit projects";
 $lang["can_delete_projects"] = "Can delete projects";
 $lang["can_create_tasks"] = "Can create tasks";
 $lang["can_edit_tasks"] = "Can edit tasks";
+$lang["can_add_checklists"] = "Can add checklists";
+$lang["can_move_tasks"] = "Can move tasks";
 $lang["can_delete_tasks"] = "Can delete tasks";
 $lang["can_comment_on_tasks"] = "Can comment on tasks";
 $lang["can_create_milestones"] = "Can create milestones";

@@ -48,7 +48,8 @@ foreach ($tasks as $task) {
         $toggle_sub_task_icon = "<span class='filter-sub-task-kanban-button clickable float-end ml5' title='" . app_lang("show_sub_tasks") . "' main-task-id= '#$task->id'><i data-feather='filter' class='icon-14'></i></span>";
     }
 
-    $disable_dragging = get_array_value($tasks_edit_permissions, $task->id) ? "" : "disable-dragging";
+    $disable_dragging = get_array_value($tasks_edit_permissions, $task->id) || $can_move_tasks ? "" : "disable-dragging";
+    //$disable_dragging = $can_move_tasks;
 
     //custom fields to show in kanban
     $kanban_custom_fields_data = "";

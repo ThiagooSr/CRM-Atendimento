@@ -321,6 +321,24 @@ class Tasks extends Security_Controller {
         }
     }
 
+    private function can_add_checklists($task_info = null)
+    {
+        if (get_array_value($this->login_user->permissions, "can_add_checklists") == "1") {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function can_move_tasks($task_info = null)
+    {
+        if (get_array_value($this->login_user->permissions, "can_move_tasks") == "1") {
+            return true;
+        }
+
+        return false;
+    }
+
     private function can_view_tasks($context = "", $context_id = 0, $task_info = null) {
         if ($task_info) {
             $context_data = $this->get_context_and_id($task_info);
@@ -1568,14 +1586,14 @@ class Tasks extends Security_Controller {
         }
 
         $status = js_anchor("<span class='$checkbox_class mr15 float-start'></span>", array('title' => "", "data-id" => $data->id, "data-value" => $is_checked_value, "data-act" => "update-checklist-item-status-checkbox"));
-        if (!$this->can_edit_tasks($data->task_id)) {
+        if (!$this->can_edit_tasks($data->task_id) && !$this->can_add_checklists($data->task_id)) {
             $status = "";
         }
 
         $title = "<span class='font-13 $title_class'>" . $title_value . "</span>";
 
         $delete = ajax_anchor(get_uri("tasks/delete_checklist_item/$data->id"), "<div class='float-end'><i data-feather='x' class='icon-16'></i></div>", array("class" => "delete-checklist-item", "title" => app_lang("delete_checklist_item"), "data-fade-out-on-success" => "#checklist-item-row-$data->id"));
-        if (!$this->can_edit_tasks($data->task_id)) {
+        if (!$this->can_edit_tasks($data->task_id) && !$this->can_add_checklists($data->task_id)) {
             $delete = "";
         }
 
@@ -1597,7 +1615,7 @@ class Tasks extends Security_Controller {
         }
 
         $status = "";
-        if ($this->can_edit_tasks($data)) {
+        if ($this->can_edit_tasks($data) || this->can_add_checklists($data->task_id)) {
             $status = js_anchor("<span class='$checkbox_class mr15 float-start'></span>", array('title' => "", "data-id" => $data->id, "data-value" => $data->status_key_name === "done" ? "1" : "3", "data-act" => "update-sub-task-status-checkbox"));
         }
 
@@ -1648,6 +1666,9 @@ class Tasks extends Security_Controller {
 
         $view_data['can_edit_tasks'] = $this->can_edit_tasks($model_info);
         $view_data['can_edit_task_status'] = $this->_can_edit_task_status($model_info);
+
+        $view_data['can_add_checklists'] = $this->can_add_checklists($model_info);
+        $view_data['can_move_tasks'] = $this->can_move_tasks($model_info);
 
         $view_data['can_comment_on_tasks'] = $this->_can_comment_on_tasks($model_info);
 
@@ -1759,7 +1780,7 @@ class Tasks extends Security_Controller {
 
         $tasks .= "<div id='dependency-task-row-$task_info->id' class='list-group-item mb5 dependency-task-row b-a rounded' style='border-left: 5px solid $task_info->status_color !important;'>";
 
-        if ($this->can_edit_tasks($task_info)) {
+        if ($this->can_edit_tasks($task_info) || $this->can_add_checklists($task_info)) {
             $tasks .= ajax_anchor(get_uri("tasks/delete_dependency_task/$task_info->id/$task_id/$type"), "<div class='float-end'><i data-feather='x' class='icon-16'></i></div>", array("class" => "delete-dependency-task", "title" => app_lang("delete"), "data-fade-out-on-success" => "#dependency-task-row-$task_info->id", "data-dependency-type" => $type));
         }
 
@@ -1792,7 +1813,7 @@ class Tasks extends Security_Controller {
         validate_numeric_value($task_id);
         $task_info = $this->Tasks_model->get_one($task_id);
 
-        if (!$this->can_edit_tasks($task_info)) {
+        if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
             app_redirect("forbidden");
         }
 
@@ -1847,7 +1868,7 @@ class Tasks extends Security_Controller {
         $task_info = $this->Tasks_model->get_one($task_id);
 
         if ($task_id) {
-            if (!$this->can_edit_tasks($task_info)) {
+            if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
                 app_redirect("forbidden");
             }
         }
@@ -1891,7 +1912,7 @@ class Tasks extends Security_Controller {
 
         $task_info = $this->Tasks_model->get_one($task_id);
 
-        if (!$this->can_edit_tasks($task_info)) {
+        if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
             app_redirect("forbidden");
         }
 
@@ -1935,7 +1956,7 @@ class Tasks extends Security_Controller {
         $task_id = $this->Checklist_items_model->get_one($id)->task_id;
 
         if ($id) {
-            if (!$this->can_edit_tasks($task_id)) {
+            if (!$this->can_edit_tasks($task_id) && !$this->can_add_checklists($task_id)) {
                 app_redirect("forbidden");
             }
         }
@@ -2014,7 +2035,7 @@ class Tasks extends Security_Controller {
         //add the new task with old
         $task_info = $this->Tasks_model->get_one($task_id);
 
-        if (!$this->can_edit_tasks($task_info)) {
+        if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
             app_redirect("forbidden");
         }
 
@@ -2938,6 +2959,7 @@ class Tasks extends Security_Controller {
             $view_data["tasks"] = $this->Tasks_model->get_kanban_details($options)->getResult();
             $tasks_edit_permissions = $this->_get_tasks_status_edit_permissions($view_data["tasks"]);
             $view_data["tasks_edit_permissions"] = $tasks_edit_permissions;
+            $view_data["can_move_tasks"] = $this->can_move_tasks();
             return $this->template->view('tasks/kanban/kanban_column_items', $view_data);
         } else {
             $task_count_query_options = $options;
@@ -3031,6 +3053,7 @@ class Tasks extends Security_Controller {
         );
 
         $view_data['can_edit_project_tasks'] = $this->_can_edit_project_tasks($project_id);
+        $view_data['can_move_tasks'] = $this->can_move_tasks($project_id);
         $view_data['project_id'] = $project_id;
 
         $max_sort = $this->request->getPost('max_sort');
@@ -3381,7 +3404,7 @@ class Tasks extends Security_Controller {
         $id = $this->request->getPost('id');
         $task_info = $this->Tasks_model->get_one($id);
 
-        if (!$this->_can_edit_task_status($task_info)) {
+        if (!$this->_can_edit_task_status($task_info) && !$this->can_move_tasks($task_info)) {
             app_redirect("forbidden");
         }
 
@@ -3667,7 +3690,7 @@ class Tasks extends Security_Controller {
                 "bg_color" => $color,
                 "progress" => 0, //we've to add this to prevent error
                 "dependencies" => $dependencies,
-                "draggable" => $can_edit_tasks ? true : false, //disable dragging for non-permitted users
+                "draggable" => $can_edit_tasks || $can_move_tasks ? true : false, //disable dragging for non-permitted users
             );
 
             $tasks_array[$group_id][] = $gantt_array_data;
@@ -3808,7 +3831,7 @@ class Tasks extends Security_Controller {
     function get_checklist_group_suggestion() {
         $task_id = $this->request->getPost("task_id");
         $task_info = $this->Tasks_model->get_one($task_id);
-        if (!$this->can_edit_tasks($task_info)) {
+        if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
             app_redirect("forbidden");
         }
 
@@ -3829,7 +3852,7 @@ class Tasks extends Security_Controller {
     function get_checklist_template_suggestion() {
         $task_id = $this->request->getPost("task_id");
         $task_info = $this->Tasks_model->get_one($task_id);
-        if (!$this->can_edit_tasks($task_info)) {
+        if (!$this->can_edit_tasks($task_info) && !$this->can_add_checklists($task_info)) {
             app_redirect("forbidden");
         }
 

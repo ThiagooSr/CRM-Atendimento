@@ -33,6 +33,7 @@
                     echo view("tasks/kanban/kanban_column_items", array(
                         "tasks" => $tasks,
                         "can_edit_project_tasks" > $can_edit_project_tasks,
+                        "can_move_tasks" => $can_move_tasks,
                         "project_id" > $project_id,
                         "tasks_edit_permissions"=> get_array_value($tasks_edit_permissions_list, $column->id)
                     ));
@@ -178,7 +179,7 @@
         var isChrome = !!window.chrome && !!window.chrome.webstore;
 
 
-<?php if ($login_user->user_type == "staff" || ($login_user->user_type == "client" && $can_edit_project_tasks)) { ?>
+<?php if ($login_user->user_type == "staff" || ($login_user->user_type == "client" && $can_edit_project_tasks) ||  ($login_user->user_type == "client" && $can_move_tasks)) { ?>
             $(".kanban-item-list").each(function (index) {
                 var id = this.id;
 

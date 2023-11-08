@@ -90,6 +90,8 @@ class Roles extends Security_Controller {
 
             $view_data['can_create_tasks'] = get_array_value($permissions, "can_create_tasks");
             $view_data['can_edit_tasks'] = get_array_value($permissions, "can_edit_tasks");
+            $view_data['can_add_checklists'] = get_array_value($permissions, "can_add_checklists");
+            $view_data['can_move_tasks'] = get_array_value($permissions, "can_move_tasks");
             $view_data['can_delete_tasks'] = get_array_value($permissions, "can_delete_tasks");
             $view_data['can_comment_on_tasks'] = get_array_value($permissions, "can_comment_on_tasks");
             $view_data['show_assigned_tasks_only'] = get_array_value($permissions, "show_assigned_tasks_only");
@@ -219,6 +221,8 @@ class Roles extends Security_Controller {
 
         $can_create_tasks = $this->request->getPost('can_create_tasks');
         $can_edit_tasks = $this->request->getPost('can_edit_tasks');
+        $can_add_checklists = $this->request->getPost('can_add_checklists');
+        $can_move_tasks = $this->request->getPost('can_move_tasks');
         $can_delete_tasks = $this->request->getPost('can_delete_tasks');
         $can_comment_on_tasks = $this->request->getPost('can_comment_on_tasks');
         $show_assigned_tasks_only = $this->request->getPost('show_assigned_tasks_only');
@@ -324,6 +328,8 @@ class Roles extends Security_Controller {
             "can_add_remove_project_members" => $can_add_remove_project_members,
             "can_create_tasks" => $can_create_tasks,
             "can_edit_tasks" => $can_edit_tasks,
+            "can_add_checklists" => $can_add_checklists,
+            "can_move_tasks" => $can_move_tasks,
             "can_delete_tasks" => $can_delete_tasks,
             "can_comment_on_tasks" => $can_comment_on_tasks,
             "show_assigned_tasks_only" => $show_assigned_tasks_only,
